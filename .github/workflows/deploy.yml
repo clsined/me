@@ -3,14 +3,14 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]   # adapte si ta branche s'appelle "master"
-  workflow_dispatch:    # permet aussi un lancement manuel
+  workflow_dispatch:
 
 permissions:
   contents: read
   pages: write
   id-token: write
+  administration: write   # nécessaire pour l'auto-activation de Pages
 
-# Évite les déploiements concurrents
 concurrency:
   group: pages
   cancel-in-progress: true
@@ -23,15 +23,17 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
+        with:
+          enablement: true   # active Pages automatiquement (corrige le "Not Found")
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./public   # on publie uniquement le dossier public/
+          path: ./public
 
       - name: Deploy
         id: deployment
