@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clément — DevRel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Sans:wght@300;400;500&family=Fraunces:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:            #EEF1F5;
+    --surface:       #FFFFFF;
+    --surface2:      #F5F7FA;
+    --border:        #D6DBE4;
+    --text:          #1C2B3A;
+    --muted:         #6B7A8D;
+    --faint:         #A8B3C0;
+    --accent:        #2E7D9F;
+    --accent-light:  #D6EBF4;
+    --accent-mid:    #7BBDD4;
+    --mindset-c:     #B8722A;
+    --mindset-bg:    #FDF0E0;
+    --mindset-bd:    #E8C088;
+    --soft-c:        #3D8C6A;
+    --soft-bg:       #E2F2EB;
+    --soft-bd:       #96CCAF;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(circle, #B8C5D0 1px, transparent 1px);
+    background-size: 28px 28px;
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── SWITCH ── */
+  .mode-switch {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 2rem 1rem 0;
+  }
+  .switch-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--faint);
+    cursor: pointer;
+    transition: color 0.2s;
+    user-select: none;
+  }
+  .switch-label.active { color: var(--text); }
+
+  .toggle-track {
+    width: 52px;
+    height: 26px;
+    background: var(--border);
+    border-radius: 13px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.25s;
+    flex-shrink: 0;
+    border: 1.5px solid var(--border);
+  }
+  .toggle-track.pro-active { background: var(--accent); border-color: var(--accent); }
+
+  .toggle-thumb {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 18px;
+    height: 18px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform 0.25s cubic-bezier(.4,0,.2,1);
+    box-shadow: 0 1px 4px #1C2B3A22;
+  }
+  .toggle-track.pro-active .toggle-thumb { transform: translateX(26px); }
+
+  /* ── HEADER ── */
+  header {
+    text-align: center;
+    padding: 1.2rem 1rem 1.5rem;
+  }
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    line-height: 1.1;
+    transition: opacity 0.2s;
+  }
+  h1 .name {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-style: italic;
+    letter-spacing: 0.01em;
+  }
+  h1 .role { color: var(--accent); font-weight: 600; }
+  .subtitle {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 400;
+    transition: opacity 0.2s;
+  }
+
+  /* ── STAGE ── */
+  .stage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2.5rem;
+    padding: 2rem 1.5rem 1rem;
+    max-width: 1080px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+  }
+
+  /* ── MISSION CARDS ── */
+  .missions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    width: 215px;
+    flex-shrink: 0;
+  }
+  .mission-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent-mid);
+    border-radius: 0 8px 8px 0;
+    padding: 0.7rem 0.9rem 0.7rem 1rem;
+    transition: border-left-color 0.2s, box-shadow 0.2s, transform 0.15s;
+    box-shadow: 0 1px 4px #1C2B3A0C;
+  }
+  .mission-card:hover {
+    border-left-color: var(--accent);
+    box-shadow: 0 4px 16px #2E7D9F1A;
+    transform: translateX(3px);
+  }
+  .missions.left .mission-card {
+    border-left: 1px solid var(--border);
+    border-right: 3px solid var(--accent-mid);
+    border-radius: 8px 0 0 8px;
+    padding: 0.7rem 1rem 0.7rem 0.9rem;
+  }
+  .missions.left .mission-card:hover {
+    border-right-color: var(--accent);
+    transform: translateX(-3px);
+  }
+  .mc-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.6rem;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+  }
+  .mc-title {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  .mc-note {
+    font-size: 0.69rem;
+    color: var(--muted);
+    margin-top: 0.2rem;
+    line-height: 1.45;
+    font-weight: 300;
+  }
+
+  /* ── FIGURE ── */
+  .figure-wrap {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    position: relative;
+  }
+  .orbit-ring {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 230px; height: 230px;
+    margin-top: -115px; margin-left: -115px;
+    border-radius: 50%;
+    border: 1.5px dashed var(--accent-mid);
+    opacity: 0.45;
+    animation: orbit-spin 18s linear infinite;
+    pointer-events: none;
+  }
+  .orbit-ring::after {
+    content: '';
+    position: absolute;
+    top: -4px; left: 50%;
+    width: 7px; height: 7px;
+    background: var(--accent);
+    border-radius: 50%;
+    margin-left: -3.5px;
+    opacity: 0.8;
+  }
+  @keyframes orbit-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .orbit-ring { animation: none; } }
+
+  .zone-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 0.22rem 0.85rem;
+    border-radius: 3px;
+    font-weight: 700;
+    width: 158px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    user-select: none;
+    position: relative;
+    z-index: 2;
+  }
+  .zone-label:hover { transform: scale(1.05); }
+  .zone-label.mindset { background: var(--mindset-bg); color: var(--mindset-c); border: 1px solid var(--mindset-bd); }
+  .zone-label.mindset:hover { box-shadow: 0 3px 10px #B8722A22; }
+  .zone-label.tech    { background: var(--accent-light); color: var(--accent); border: 1px solid var(--accent-mid); }
+  .zone-label.tech:hover    { box-shadow: 0 3px 10px #2E7D9F22; }
+  .zone-label.soft    { background: var(--soft-bg); color: var(--soft-c); border: 1px solid var(--soft-bd); }
+  .zone-label.soft:hover    { box-shadow: 0 3px 10px #3D8C6A22; }
+
+  #figure-svg { display: block; position: relative; z-index: 2; }
+  .body-zone { cursor: pointer; }
+  .body-zone rect, .body-zone circle, .body-zone path, .body-zone line { transition: opacity 0.18s; }
+  .body-zone:hover rect, .body-zone:hover circle, .body-zone:hover path, .body-zone:hover line { opacity: 0.75; }
+
+  /* ── SKILL PANEL ── */
+  .skill-panel {
+    position: fixed;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--accent);
+    border-radius: 0 0 10px 10px;
+    padding: 1.1rem 1.3rem;
+    width: 275px;
+    box-shadow: 0 8px 28px #1C2B3A14;
+    z-index: 200;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.15s, transform 0.15s;
+  }
+  .skill-panel.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+  .skill-panel.mindset-panel { border-top-color: var(--mindset-c); }
+  .skill-panel.soft-panel    { border-top-color: var(--soft-c); }
+  .panel-zone {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+  }
+  .panel-zone.mindset { color: var(--mindset-c); }
+  .panel-zone.tech    { color: var(--accent); }
+  .panel-zone.soft    { color: var(--soft-c); }
+  .panel-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 0.65rem;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  .skill-tag {
+    display: inline-block;
+    border-radius: 3px;
+    padding: 0.17rem 0.5rem;
+    font-size: 0.67rem;
+    margin: 0.17rem 0.1rem 0.17rem 0;
+    font-weight: 400;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+  .skill-tag.hi-tech    { background: var(--accent-light); border-color: var(--accent-mid); color: var(--accent); font-weight: 500; }
+  .skill-tag.hi-mindset { background: var(--mindset-bg); border-color: var(--mindset-bd); color: var(--mindset-c); font-weight: 500; }
+  .skill-tag.hi-soft    { background: var(--soft-bg); border-color: var(--soft-bd); color: var(--soft-c); font-weight: 500; }
+
+  /* ── BIO ── */
+  .bio-strip {
+    max-width: 620px;
+    margin: 1.5rem auto 0;
+    padding: 0 1.5rem;
+  }
+  .bio-strip p {
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.75;
+    font-weight: 300;
+    text-align: center;
+  }
+  .bio-strip strong { color: var(--text); font-weight: 500; }
+
+  footer {
+    text-align: center;
+    padding: 2rem 1rem;
+    font-size: 0.65rem;
+    color: var(--faint);
+    letter-spacing: 0.07em;
+  }
+
+  /* content transition */
+  .fade-swap { transition: opacity 0.18s; }
+  .fade-swap.fading { opacity: 0; }
+
+  @media (max-width: 720px) {
+    .stage { flex-direction: column; align-items: center; }
+    .missions { width: 100%; max-width: 340px; }
+    .missions.left .mission-card {
+      border-left: 3px solid var(--accent-mid);
+      border-right: 1px solid var(--border);
+      border-radius: 0 8px 8px 0;
+    }
+    .missions.left .mission-card:hover { transform: translateX(3px); }
+    .orbit-ring { width: 200px; height: 200px; margin-top: -100px; margin-left: -100px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SWITCH -->
+<div class="mode-switch">
+  <span class="switch-label active" id="label-perso">Perso</span>
+  <div class="toggle-track" id="toggleTrack">
+    <div class="toggle-thumb"></div>
+  </div>
+  <span class="switch-label" id="label-pro">Pro</span>
+</div>
+
+<header>
+  <h1 class="fade-swap" id="main-title"><span class="name">Clément</span> — <span class="role" id="title-role">Être humain</span></h1>
+  <div class="subtitle fade-swap" id="main-subtitle">// Procrastinateur, sympa</div>
+</header>
+
+<div class="stage">
+
+  <!-- LEFT missions -->
+  <div class="missions left" id="missions-left"></div>
+
+  <!-- CENTER figure -->
+  <div class="figure-wrap" id="figureWrap">
+    <div class="orbit-ring"></div>
+    <div class="zone-label mindset" data-zone="mindset">Mindset</div>
+
+    <svg id="figure-svg" width="180" height="278" viewBox="0 0 180 278" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g class="body-zone" id="zone-mindset" data-zone="mindset">
+        <circle cx="90" cy="32" r="25" fill="#FDF0E0" opacity="0.8"/>
+        <circle cx="90" cy="32" r="21" fill="none" stroke="#B8722A" stroke-width="2.2"/>
+        <circle cx="83" cy="28" r="2" fill="#B8722A"/>
+        <circle cx="97" cy="28" r="2" fill="#B8722A"/>
+        <!-- mouth: perso = smile, pro = straight line -->
+        <path id="face-mouth" d="M83 38 Q90 43 97 38" stroke="#B8722A" stroke-width="1.8" stroke-linecap="round" fill="none" style="transition: d 0.35s ease;"/>
+        <!-- pro only: eyebrows -->
+        <line id="face-brow-l" x1="80" y1="22" x2="87" y2="22" stroke="#B8722A" stroke-width="1.6" stroke-linecap="round" opacity="0" style="transition: opacity 0.3s;"/>
+        <line id="face-brow-r" x1="93" y1="22" x2="100" y2="22" stroke="#B8722A" stroke-width="1.6" stroke-linecap="round" opacity="0" style="transition: opacity 0.3s;"/>
+        <line x1="90" y1="53" x2="90" y2="66" stroke="#B8722A" stroke-width="2.2" stroke-linecap="round"/>
+      </g>
+      <g class="body-zone" id="zone-tech" data-zone="tech">
+        <rect x="65" y="68" width="50" height="70" rx="4" fill="#D6EBF4" opacity="0.7"/>
+        <rect x="68" y="70" width="44" height="66" rx="4" fill="none" stroke="#2E7D9F" stroke-width="2.2"/>
+        <line x1="76" y1="84"  x2="104" y2="84"  stroke="#2E7D9F" stroke-width="1" stroke-dasharray="4 3" opacity="0.5"/>
+        <line x1="76" y1="96"  x2="108" y2="96"  stroke="#2E7D9F" stroke-width="1" stroke-dasharray="4 3" opacity="0.4"/>
+        <line x1="76" y1="108" x2="102" y2="108" stroke="#2E7D9F" stroke-width="1" stroke-dasharray="4 3" opacity="0.4"/>
+        <line x1="76" y1="120" x2="106" y2="120" stroke="#2E7D9F" stroke-width="1" stroke-dasharray="4 3" opacity="0.35"/>
+        <line x1="68"  y1="80" x2="22"  y2="118" stroke="#2E7D9F" stroke-width="2.2" stroke-linecap="round"/>
+        <line x1="112" y1="80" x2="158" y2="118" stroke="#2E7D9F" stroke-width="2.2" stroke-linecap="round"/>
+        <!-- tie: visible in pro mode only -->
+        <g id="figure-tie" opacity="0" style="transition: opacity 0.3s;">
+          <polygon points="90,68 86,80 88,98 90,102 92,98 94,80" fill="#6B2D8B" stroke="#6B2D8B" stroke-width="0.5" stroke-linejoin="round"/>
+          <polygon points="87,68 93,68 94,75 90,78 86,75" fill="#A100FF" stroke="#A100FF" stroke-width="0.5" stroke-linejoin="round"/>
+        </g>
+      </g>
+      <g class="body-zone" id="zone-soft" data-zone="soft">
+        <path d="M70 137 L53 224 L70 224 L90 166 L110 224 L127 224 L110 137 Z" fill="#E2F2EB" opacity="0.6"/>
+        <path d="M70 139 Q90 149 110 139" stroke="#3D8C6A" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <line x1="80"  y1="141" x2="59"  y2="224" stroke="#3D8C6A" stroke-width="2.2" stroke-linecap="round"/>
+        <line x1="100" y1="141" x2="121" y2="224" stroke="#3D8C6A" stroke-width="2.2" stroke-linecap="round"/>
+        <line x1="59"  y1="224" x2="46"  y2="228" stroke="#3D8C6A" stroke-width="2.2" stroke-linecap="round"/>
+        <line x1="121" y1="224" x2="134" y2="228" stroke="#3D8C6A" stroke-width="2.2" stroke-linecap="round"/>
+      </g>
+    </svg>
+
+    <div class="zone-label tech" data-zone="tech" style="margin-top:-2px">Technical Skills</div>
+    <div class="zone-label soft" data-zone="soft" style="margin-top:3px">Soft Skills</div>
+  </div>
+
+  <!-- RIGHT missions -->
+  <div class="missions right" id="missions-right"></div>
+</div>
+
+<!-- Skill Panel -->
+<div class="skill-panel" id="skillPanel">
+  <div class="panel-zone" id="panelZone"></div>
+  <div class="panel-title" id="panelTitle"></div>
+  <div id="panelTags"></div>
+</div>
+
+<!-- Bio -->
+<div class="bio-strip">
+  <p id="bio-text"></p>
+</div>
+
+<footer>tap les zones du personnage ou les badges · esc pour fermer</footer>
+
+<script>
+const data = {
+  perso: {
+    titleName: 'Clément',
+    titleRole: 'Être humain',
+    subtitle: '// Procrastinateur, sympa',
+    bio: 'Passionné de <strong>fromages</strong> en tout genre, adepte du <strong>diabolo</strong> et de la <strong>randonnée</strong>, et propriétaire d\'un chien qui décide du planning du week-end. En dehors des écrans, la vie est simple.',
+    missionsLeft: [
+      { label: 'Activité 01', title: 'Promener mon chien', note: 'Sorti obligatoire, météo ou pas. Parfois 2 fois par jour.' },
+      { label: 'Activité 02', title: 'Randonnée', note: 'Sentiers de montagne, forêts, peu importe — tant que ça monte.' },
+    ],
+    missionsRight: [
+      { label: 'Activité 03', title: 'Manger', note: 'Surtout du fromage. En grande quantité. Sans modération.' },
+      { label: 'Activité 04', title: 'Faire du diabolo', note: 'Jonglerie aérienne. Plus impressionnant que ça en a l\'air.' },
+    ],
+    zones: {
+      mindset: {
+        label: 'Mindset',
+        cls: 'mindset',
+        panelCls: 'mindset-panel',
+        title: 'Philosophie de vie',
+        tags: [
+          { text: 'YOLO raisonné', hi: true },
+          { text: 'Flemme productive', hi: true },
+          { text: 'Optimisme tranquille', hi: false },
+          { text: 'Curiosité permanente', hi: false },
+          { text: 'Pas de réunion avant 9h', hi: true },
+          { text: 'Napping stratégique', hi: false },
+          { text: 'Anti-drama', hi: false },
+        ]
+      },
+      tech: {
+        label: 'Technical Skills',
+        cls: 'tech',
+        panelCls: '',
+        title: 'Expertise terrain',
+        tags: [
+          { text: 'Laisse à dérouler', hi: true },
+          { text: 'GPS & cartes IGN', hi: false },
+          { text: 'Bâtons de rando', hi: false },
+          { text: 'Identification fromages', hi: true },
+          { text: 'Cave à fromage', hi: false },
+          { text: 'Lancer de diabolo x2', hi: true },
+          { text: 'Ficelle haute résistance', hi: false },
+          { text: 'Commandes de livraison', hi: false },
+          { text: 'Météo app avancée', hi: false },
+        ]
+      },
+      soft: {
+        label: 'Soft Skills',
+        cls: 'soft',
+        panelCls: 'soft-panel',
+        title: 'Compétences relationnelles',
+        tags: [
+          { text: 'Négociation avec le chien', hi: true },
+          { text: 'Endurance silencieuse', hi: false },
+          { text: 'Sympa naturellement', hi: true },
+          { text: 'Tolérance au fromage fort', hi: false },
+          { text: 'Patience (diabolo)', hi: true },
+          { text: 'Créativité inutile', hi: false },
+          { text: 'Bonne humeur par défaut', hi: false },
+        ]
+      }
+    }
+  },
+  pro: {
+    titleName: 'Clément',
+    titleRole: 'DevRel',
+    subtitle: 'SRE · Architect · Tech Lead · Developer Relations',
+    bio: 'Interface entre le domaine <strong>SMI/SEE</strong> et les équipes de Build — j\'aide à accélérer l\'adoption des produits, services et standards en les rendant <strong>compréhensibles, consommables et mesurables</strong>. Background <strong>SRE · Architect · Tech Lead</strong>, avec une pratique réelle de la GenAI et des workflows DevOps, du développement et de l\'architecture.',
+    missionsLeft: [
+      { label: 'Mission 01', title: 'Évangélisation & Communication', note: 'Promouvoir l\'offre SEE auprès des squads et stakeholders' },
+      { label: 'Mission 02', title: 'Production de contenus scalables', note: 'Guides, how-to, playbooks, templates via Carbon Portal' },
+      { label: 'Mission 03', title: 'Onboarding', note: 'Structurer les parcours d\'adoption IA, tooling, pratiques' },
+    ],
+    missionsRight: [
+      { label: 'Mission 04', title: 'Animation & Communauté', note: 'CoP, Tech Talks, démos, rituels d\'adoption — en synergie avec CSM' },
+      { label: 'Mission 05', title: 'Feedback & Impact', note: 'VSM, retours terrain → backlogs, taux d\'adoption SEE, usage Carbon Portal, success stories' },
+    ],
+    zones: {
+      mindset: {
+        label: 'Mindset',
+        cls: 'mindset',
+        panelCls: 'mindset-panel',
+        title: 'Customer Centricity & Posture DevRel',
+        tags: [
+          { text: 'Valeur > Outillage', hi: true },
+          { text: 'Influence sans autorité', hi: true },
+          { text: 'Customer Centricity', hi: false },
+          { text: 'Orientation impact', hi: false },
+          { text: 'Enablement culture', hi: false },
+          { text: 'Facilitation', hi: false },
+          { text: 'Amélioration continue', hi: false },
+          { text: "Adoption à l'échelle", hi: true },
+        ]
+      },
+      tech: {
+        label: 'Technical Skills',
+        cls: 'tech',
+        panelCls: '',
+        title: 'Engineering & Developer Tooling',
+        tags: [
+          { text: 'CI/CD · GitLab', hi: true },
+          { text: 'SRE · DevOps', hi: true },
+          { text: 'Java · Spring', hi: false },
+          { text: 'Angular', hi: false },
+          { text: 'Golang', hi: false },
+          { text: 'Python', hi: false },
+          { text: 'Agentic AI · GenAI', hi: true },
+          { text: 'MCP Servers', hi: false },
+          { text: 'Developer Portal', hi: false },
+          { text: 'Platform Engineering', hi: false },
+          { text: 'Golden Path', hi: false },
+          { text: 'Grafana · OpenTelemetry', hi: false },
+          { text: 'Kubernetes', hi: false },
+          { text: 'Kafka', hi: false },
+          { text: 'ArchiMate · TOGAF', hi: false },
+        ]
+      },
+      soft: {
+        label: 'Soft Skills',
+        cls: 'soft',
+        panelCls: 'soft-panel',
+        title: 'Relations & Communication',
+        tags: [
+          { text: 'Vulgarisation tech', hi: true },
+          { text: 'Diplomatie', hi: false },
+          { text: 'Animation CoP', hi: false },
+          { text: 'Rédaction technique', hi: true },
+          { text: 'Multi-stakeholders', hi: false },
+          { text: 'Formateur', hi: false },
+          { text: 'Challenger bienveillant', hi: false },
+          { text: 'Pédagogie', hi: true },
+        ]
+      }
+    }
+  }
+};
+
+let currentMode = 'perso';
+let zones = data.perso.zones;
+
+const panel = document.getElementById('skillPanel');
+const panelZone = document.getElementById('panelZone');
+const panelTitle = document.getElementById('panelTitle');
+const panelTags = document.getElementById('panelTags');
+let locked = false;
+let lastTarget = null;
+
+function renderMissions(containerId, missions, side) {
+  const el = document.getElementById(containerId);
+  el.innerHTML = missions.map(m => `
+    <div class="mission-card">
+      <div class="mc-label">${m.label}</div>
+      <div class="mc-title">${m.title}</div>
+      <div class="mc-note">${m.note}</div>
+    </div>
+  `).join('');
+}
+
+function applyMode(mode, animate) {
+  currentMode = mode;
+  zones = data[mode].zones;
+  const d = data[mode];
+
+  const fadeEls = document.querySelectorAll('.fade-swap');
+  const title = document.getElementById('main-title');
+  const subtitle = document.getElementById('main-subtitle');
+  const bio = document.getElementById('bio-text');
+  const missLeft = document.getElementById('missions-left');
+  const missRight = document.getElementById('missions-right');
+
+  const doSwap = () => {
+    document.getElementById('title-role').textContent = d.titleRole;
+    subtitle.textContent = d.subtitle;
+    bio.innerHTML = d.bio;
+    renderMissions('missions-left', d.missionsLeft, 'left');
+    renderMissions('missions-right', d.missionsRight, 'right');
+    // update face
+    const mouth = document.getElementById('face-mouth');
+    const browL = document.getElementById('face-brow-l');
+    const browR = document.getElementById('face-brow-r');
+    const tie = document.getElementById('figure-tie');
+    if (mode === 'pro') {
+      mouth.setAttribute('d', 'M84 38 Q90 40 96 38');
+      tie.setAttribute('opacity', '1');
+    } else {
+      mouth.setAttribute('d', 'M83 38 Q90 43 97 38');
+      tie.setAttribute('opacity', '0');
+    }
+    // close panel
+    panel.classList.remove('visible');
+    locked = false;
+    lastTarget = null;
+  };
+
+  if (animate) {
+    fadeEls.forEach(e => e.classList.add('fading'));
+    missLeft.style.opacity = '0';
+    missLeft.style.transition = 'opacity 0.18s';
+    missRight.style.opacity = '0';
+    missRight.style.transition = 'opacity 0.18s';
+    setTimeout(() => {
+      doSwap();
+      fadeEls.forEach(e => e.classList.remove('fading'));
+      missLeft.style.opacity = '1';
+      missRight.style.opacity = '1';
+    }, 180);
+  } else {
+    doSwap();
+  }
+
+  // update switch UI
+  document.getElementById('label-perso').classList.toggle('active', mode === 'perso');
+  document.getElementById('label-pro').classList.toggle('active', mode === 'pro');
+  document.getElementById('toggleTrack').classList.toggle('pro-active', mode === 'pro');
+}
+
+// Switch interactions
+document.getElementById('toggleTrack').addEventListener('click', () => {
+  applyMode(currentMode === 'perso' ? 'pro' : 'perso', true);
+});
+document.getElementById('label-perso').addEventListener('click', () => {
+  if (currentMode !== 'perso') applyMode('perso', true);
+});
+document.getElementById('label-pro').addEventListener('click', () => {
+  if (currentMode !== 'pro') applyMode('pro', true);
+});
+
+// Init
+applyMode('perso', false);
+
+// Panel logic
+
+function showPanel(zone, x, y) {
+  const d = zones[zone];
+  panelZone.textContent = d.label;
+  panelZone.className = 'panel-zone ' + d.cls;
+  panelTitle.textContent = d.title;
+  panelTags.innerHTML = d.tags.map(t =>
+    `<span class="skill-tag${t.hi ? ' hi-' + d.cls : ''}">${t.text}</span>`
+  ).join('');
+  panel.className = 'skill-panel visible ' + d.panelCls;
+  positionPanel(x, y);
+}
+
+function positionPanel(x, y) {
+  const pw = 275, ph = 210;
+  const vw = window.innerWidth, vh = window.innerHeight;
+  let left = x + 16, top = y - 20;
+  if (left + pw > vw - 10) left = x - pw - 16;
+  if (top + ph > vh - 10) top = vh - ph - 10;
+  if (top < 10) top = 10;
+  panel.style.left = left + 'px';
+  panel.style.top = top + 'px';
+}
+
+function attachZone(el) {
+  el.addEventListener('mouseenter', () => {
+    if (locked) return;
+    const z = el.dataset.zone;
+    const r = el.getBoundingClientRect();
+    showPanel(z, r.right, r.top + r.height / 2);
+    lastTarget = z;
+  });
+  el.addEventListener('mousemove', e => { if (!locked) positionPanel(e.clientX, e.clientY); });
+  el.addEventListener('mouseleave', () => { if (!locked) panel.classList.remove('visible'); });
+  el.addEventListener('click', e => {
+    e.stopPropagation();
+    const z = el.dataset.zone;
+    const r = el.getBoundingClientRect();
+    if (locked && lastTarget === z) { locked = false; panel.classList.remove('visible'); }
+    else { locked = true; lastTarget = z; showPanel(z, r.right, r.top + r.height / 2); }
+  });
+}
+
+document.querySelectorAll('.body-zone, .zone-label[data-zone]').forEach(attachZone);
+panel.addEventListener('click', e => e.stopPropagation());
+document.addEventListener('click', () => { locked = false; panel.classList.remove('visible'); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { locked = false; panel.classList.remove('visible'); } });
+</script>
+</body>
+</html>
